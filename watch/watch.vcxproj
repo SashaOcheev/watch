@@ -122,7 +122,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="clock.cpp" />
+    <ClCompile Include="graph.cpp" />
+    <ClCompile Include="init.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="clock.h" />
+    <ClInclude Include="const.h" />
+    <ClInclude Include="graph.h" />
+    <ClInclude Include="init.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
