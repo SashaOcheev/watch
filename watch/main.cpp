@@ -7,10 +7,6 @@
 #include <vector>
 #include <windows.h>  
 
-//#include "init.h"
-//#include "shapes.h"
-//#include "convert.h"
-
 const int win_size = 500;
 
 struct Clock
