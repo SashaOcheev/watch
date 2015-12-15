@@ -6,7 +6,7 @@
 #include "init.h"
 
 
-void drawResections(sf::RenderWindow &window, sf::RectangleShape resections[resection_count], int count)
+void drawResections(sf::RenderWindow &window, sf::RectangleShape resections[RESECTION_COUNT], int count)
 {
 	for (int i = 0; i < count; i++)
 		window.draw(resections[i]);
@@ -18,7 +18,7 @@ void drawElements(sf::RenderWindow &window, Init &init)
 
 	window.draw(init.watch.main);
 
-	drawResections(window, init.resections, resection_count);
+	drawResections(window, init.resections, RESECTION_COUNT);
 
 	window.draw(init.watch.inside);
 

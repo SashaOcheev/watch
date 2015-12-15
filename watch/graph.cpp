@@ -7,7 +7,7 @@
 
 sf::CircleShape initCircle(sf::Color color, float radius, sf::Color outline_color, float outline_thickness, sf::Vector2f position)
 {
-	sf::CircleShape circle(radius, 64);
+	sf::CircleShape circle(radius, WATCH.ANGLE_COUNT);
 	circle.setFillColor(color);
 	circle.setOutlineColor(outline_color);
 	circle.setOutlineThickness(outline_thickness);
@@ -25,18 +25,30 @@ sf::RectangleShape initLine(sf::Color color, sf::Vector2f size, sf::Vector2f pos
 	return line;
 }
 
-void setResections(sf::RectangleShape resections[resection_count], int count, sf::Color color, sf::Vector2f size, sf::Vector2f position)
+void setResections(sf::RectangleShape resections[RESECTION_COUNT], int count, sf::Color color, sf::Vector2f size, sf::Vector2f position)
 {
 	for (int i = 0; i < count; i++)
 	{
-		float angle = -90.f + float(i) * 360 / float(count);
+		float angle = ANGLE_MEASURE.SHIFT + float(i) * ANGLE_MEASURE.FULL / float(count);
 		resections[i] = initLine(color, size, position, angle);
 	}
 }
 
 void setAngles(Clock &clock, Arrows &arrows)
 {
-	arrows.sec.setRotation(-90.f + 6.f * clock.sec);
-	arrows.min.setRotation(-90.f + 6.f * clock.min + float(0.1) * clock.sec);
-	arrows.hour.setRotation(-90.f + 30.f * clock.hour + float(0.5) * clock.min);
+	arrows.sec.setRotation(ANGLE_MEASURE.SHIFT + ANGLE_MEASURE.SEC.UNIT * clock.sec);
+	arrows.min.setRotation(ANGLE_MEASURE.SHIFT + ANGLE_MEASURE.MIN.UNIT * clock.min + ANGLE_MEASURE.MIN.FRACTION * clock.sec);
+	arrows.hour.setRotation(ANGLE_MEASURE.SHIFT + ANGLE_MEASURE.HOUR.UNIT * clock.hour + ANGLE_MEASURE.HOUR.FRACTION * clock.min);
+}
+
+sf::Vector2f getCirclePos(int area_size, float circle_size)
+{
+	float pos = (float(area_size) / 2 - circle_size);
+	return sf::Vector2f(pos, pos);
+}
+
+sf::Vector2f getLinePos(int area_size)
+{
+	float pos = (float(area_size / 2));
+	return sf::Vector2f(pos, pos);
 }

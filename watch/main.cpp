@@ -11,11 +11,11 @@
 int main()
 {
 	Init init;
-	setResections(init.resections, resection_count, sf::Color::Black, sf::Vector2f(200, 2), sf::Vector2f(250, 250));
+	setResections(init.resections, RESECTION_COUNT, sf::Color::Black, LINE_SIZES.RESECTION, getLinePos(WINDOW.SIZE));
 
 	sf::ContextSettings settings;
-	settings.antialiasingLevel = 8;
-	sf::RenderWindow window(sf::VideoMode(win_size, win_size), "watch", sf::Style::Default, settings);
+	settings.antialiasingLevel = WINDOW.ANTIALIASING_LEVEL;
+	sf::RenderWindow window(sf::VideoMode(WINDOW.SIZE, WINDOW.SIZE), "watch", sf::Style::Default, settings);
 
 	while (window.isOpen())
 	{

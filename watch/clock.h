@@ -1,8 +1,8 @@
 struct Clock
 {
-	int hour = 0;
-	int min = 0;
-	int sec = 0;
+	int hour;
+	int min;
+	int sec;
 };
 
 void getTime(Clock &clock);
