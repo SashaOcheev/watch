@@ -154,32 +154,6 @@ struct Shapes
 	
 };
 
-/*struct Init
-{
-	Shapes shapes;
-	clock_init clock;
-	arrows_init arrows(WINDOW_SIZE);
-	circles_init circles;
-
-	Init()
-	{
-		circles.setPosition(WINDOW_SIZE);
-		shapes.setCircles(circles);
-		rectangle_params resection_params = { sf::Color::Black, sf::Vector2f(200, 2),
-			sf::Color::Black, 0.f, sf::Vector2f(0 ,0), 0.f };
-		shapes.setResections(resection_params);
-	}
-
-	void update()
-	{
-		clock.setTime();
-		arrows.setAngles(clock);
-		arrows.setPosition(WINDOW_SIZE);
-		shapes.setArrows(arrows);
-		shapes.setArrowsRotation(arrows);
-	}
-};*/
-
 void drawElements(sf::RenderWindow &window, Shapes &shapes)
 {
 	window.clear(sf::Color::White);
