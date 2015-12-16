@@ -60,7 +60,7 @@ struct circles_init
 	circle_params middle = { sf::Color::White, 64, 190, sf::Color::White, 0, sf::Vector2f(0, 0) };
 	circle_params small = { sf::Color::Black, 64, 7, sf::Color::White, 0, sf::Vector2f(0 ,0) };
 
-	void setPosition(int area_size)
+	circles_init(int area_size)
 	{
 		float temp = float(area_size) / 2;
 		big.position = sf::Vector2f(temp - big.radius, temp - big.radius);
@@ -99,7 +99,7 @@ struct arrows_init
 	rectangle_params min = { sf::Color::Green, sf::Vector2f(170, 3), sf::Color::Black, 0.f, sf::Vector2f(0 ,0), 0.f };
 	rectangle_params sec = { sf::Color::Red, sf::Vector2f(190, 2), sf::Color::Black, 0.f, sf::Vector2f(0 ,0), 0.f };
 
-	void setPosition(int area_size)
+	arrows_init(int area_size)
 	{
 		float pos = (float(area_size / 2));
 		hour.position = sf::Vector2f(pos, pos);
@@ -116,34 +116,91 @@ struct arrows_init
 };
 ////////////////////////////////////////////////////////////
 
-/*void setResections(sf::RectangleShape resections[RESECTION_COUNT])
+struct Shapes
 {
-	for (int i = 0; i < RESECTION_COUNT; i++)
-	{
-		rectangle_params resection_params;
-		resection_params = { sf::Color::Black, sf::Vector2f(200, 2), sf::Color::Black, 0.f, sf::Vector2f(250, 250), 30.f * i };
-		resections[i] = setRectangle(resection_params);
-	}
-}*/
+	sf::CircleShape big_circle;
+	sf::CircleShape middle_circle;
+	sf::CircleShape small_circle;
 
+	sf::RectangleShape hour_arrow;
+	sf::RectangleShape min_arrow;
+	sf::RectangleShape sec_arrow;
+
+	sf::RectangleShape resections[RESECTION_COUNT];
+
+	Shapes(circles_init &circles, arrows_init &arrows, rectangle_params &resection_params)
+	{
+		big_circle = setCircle(circles.big);
+		middle_circle = setCircle(circles.middle);
+		small_circle = setCircle(circles.small);
+
+		hour_arrow = setRectangle(arrows.hour);
+		min_arrow = setRectangle(arrows.min);
+		sec_arrow = setRectangle(arrows.sec);
+
+		for (int i = 0; i < RESECTION_COUNT; i++)
+		{
+			resection_params.angle = i * 30.f;
+			resections[i] = setRectangle(resection_params);
+		}
+	}
+
+	void setArrowsRotation(arrows_init &arrows)
+	{
+		hour_arrow.setRotation(arrows.hour.angle);
+		min_arrow.setRotation(arrows.min.angle);
+		sec_arrow.setRotation(arrows.sec.angle);
+	}
+	
+};
+
+/*struct Init
+{
+	Shapes shapes;
+	clock_init clock;
+	arrows_init arrows(WINDOW_SIZE);
+	circles_init circles;
+
+	Init()
+	{
+		circles.setPosition(WINDOW_SIZE);
+		shapes.setCircles(circles);
+		rectangle_params resection_params = { sf::Color::Black, sf::Vector2f(200, 2),
+			sf::Color::Black, 0.f, sf::Vector2f(0 ,0), 0.f };
+		shapes.setResections(resection_params);
+	}
+
+	void update()
+	{
+		clock.setTime();
+		arrows.setAngles(clock);
+		arrows.setPosition(WINDOW_SIZE);
+		shapes.setArrows(arrows);
+		shapes.setArrowsRotation(arrows);
+	}
+};*/
+
+void drawElements(sf::RenderWindow &window, Shapes &shapes)
+{
+	window.clear(sf::Color::White);
+	window.draw(shapes.big_circle);
+	for (int i = 0; i < RESECTION_COUNT; i++)
+		window.draw(shapes.resections[i]);
+	window.draw(shapes.middle_circle);
+	window.draw(shapes.hour_arrow);
+	window.draw(shapes.min_arrow);
+	window.draw(shapes.sec_arrow);
+	window.draw(shapes.small_circle);
+	window.display();
+}
 
 int main()
 {
 	clock_init clock;
-	
-	arrows_init arrows;
-	arrows.setPosition(WINDOW_SIZE);
-	sf::RectangleShape hour = setRectangle(arrows.hour);
-	sf::RectangleShape min = setRectangle(arrows.min);
-	sf::RectangleShape sec = setRectangle(arrows.sec);
-
-	circles_init circles;
-	circles.setPosition(WINDOW_SIZE);
-	sf::CircleShape big = setCircle(circles.big);
-	sf::CircleShape middle = setCircle(circles.middle);
-	sf::CircleShape small = setCircle(circles.small);
-
-	sf::RectangleShape resections[RESECTION_COUNT];
+	arrows_init arrows(WINDOW_SIZE);
+	circles_init circles(WINDOW_SIZE);
+	rectangle_params resection_params = { sf::Color::Black, sf::Vector2f(200, 2), sf::Color::Black, 0.f, sf::Vector2f(250, 250), 0.f };
+	Shapes shapes(circles, arrows, resection_params);
 
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = ANTIALIASING_LEVEL;
@@ -156,28 +213,11 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 
-		window.clear(sf::Color::White);
-
-		window.draw(big);
-
-		for (int i = 0; i < RESECTION_COUNT; i++)
-			window.draw(resections[i]);
-
-		window.draw(middle);
-
 		clock.setTime();
 		arrows.setAngles(clock);
-		hour.setRotation(arrows.hour.angle);
-		min.setRotation(arrows.min.angle);
-		sec.setRotation(arrows.sec.angle);
-		
-		window.draw(hour);
-		window.draw(min);
-		window.draw(sec);
+		shapes.setArrowsRotation(arrows);
 
-		window.draw(small);
-
-		window.display();
+		drawElements(window, shapes);
 	}
 	return 0;
 }
